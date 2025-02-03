@@ -14,6 +14,11 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -27,12 +32,17 @@ api.interceptors.response.use(
       response?.data?.responseCode === 401 ||
       response?.data?.responseCode === 403
     ) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("persist:root");
       toast.info("Logged out successfully.");
     }
     return response;
   },
   (error) => {
     if (error?.response && error?.response?.responseCode === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("persist:root");
+      toast.info("Logged out successfully.");
       return Promise.reject(error);
     }
 

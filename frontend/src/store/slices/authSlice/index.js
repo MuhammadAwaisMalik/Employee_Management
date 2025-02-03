@@ -10,12 +10,10 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
-      const { token, role, authData } = action.payload;
-      console.log(authData, "authData");
+      const { token, authData } = action.payload;
 
       state.authData = authData;
       state.token = token;
-      state.role = role;
 
       localStorage.setItem("token", token);
     },

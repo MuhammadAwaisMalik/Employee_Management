@@ -2,11 +2,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 // @import slices
 import loaderReducer from "./slices/loaderSlice";
-import { authSlice } from "./slices/authSlice";
+import authSliceReducer from "./slices/authSlice";
 
 const appReducer = combineReducers({
   loader: loaderReducer,
-  auth: authSlice,
+  auth: authSliceReducer,
 });
 
 export const rootReducer = (state, action) => {

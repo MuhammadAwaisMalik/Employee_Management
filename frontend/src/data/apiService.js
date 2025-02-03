@@ -27,9 +27,9 @@ export const editData = async (path, payload) => {
   }
 };
 
-export const deleteData = async (path, payload) => {
+export const deleteData = async (path) => {
   try {
-    const response = await api.delete(`${path}/${payload?.id}`);
+    const response = await api.delete(`${path}`);
     return response?.data;
   } catch (error) {
     return error;
