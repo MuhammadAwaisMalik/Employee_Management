@@ -10,6 +10,8 @@ import Leaves from "../pages/Admin/leaves";
 import Setting from "../pages/Admin/setting";
 import AddDepartment from "../pages/Admin/departments/add";
 import EditDepartment from "../pages/Admin/departments/edit";
+import AddEmployees from "../pages/Admin/employees/add";
+import EditEmployees from "../pages/Admin/employees/edit";
 const Header = lazy(() => import("./header"));
 const Sidebar = lazy(() => import("./sidebar"));
 const AdminDashboard = lazy(() => import("../pages/adminDashboard"));
@@ -47,13 +49,15 @@ const MainLayout = () => {
             <Routes>
               <Route path="/admin-dashboard" element={<AdminDashboard />}>
                 <Route index element={<DashboardSummary />} />
-                <Route path={"employees"} element={<Employees />} />
                 <Route path={"departments"} element={<Departments />} />
                 <Route path={"add-department"} element={<AddDepartment />} />
                 <Route
                   path={"edit-department/:id"}
                   element={<EditDepartment />}
                 />
+                <Route path={"employees"} element={<Employees />} />
+                <Route path={"add-employee"} element={<AddEmployees />} />
+                <Route path={"edit-employee/:id"} element={<EditEmployees />} />
                 <Route path={"leaves"} element={<Leaves />} />
                 <Route path={"settings"} element={<Setting />} />
               </Route>
