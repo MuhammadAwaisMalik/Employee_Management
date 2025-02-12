@@ -18,6 +18,7 @@ app.use(
   })
 );
 
+connectDB();
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
@@ -26,6 +27,5 @@ app.use("/api/employee", employeeRouter);
 app.use("/api/leave", leaveRouter);
 
 app.listen(PORT, () => {
-  connectDB();
   console.log("Server is running on port http://localhost:" + PORT);
 });
