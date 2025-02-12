@@ -12,11 +12,29 @@ const columns = [
   {
     name: "S No",
     selector: (row) => row.sno,
+    width: "70px",
+  },
+  {
+    name: "Profile Image",
+    selector: (row) => row.profileImage,
+    width: "150px",
+  },
+  {
+    name: "Name",
+    selector: (row) => row.name,
+    sortable: true,
+    width: "150px",
+  },
+  {
+    name: "DOB",
+    selector: (row) => row.dateOfBirth,
+    width: "150px",
   },
   {
     name: "Department Name",
     selector: (row) => row.dep_name,
     sortable: true,
+    width: "150px",
   },
   {
     name: "Action",
@@ -29,12 +47,24 @@ const ActionButton = ({ id }) => {
   return (
     <div className="flex justify-center gap-5">
       <Button
+        variant="danger"
+        onClick={() => navigate(`/admin-dashboard/view-employee/${id}`)}
+      >
+        View
+      </Button>
+      <Button
         variant="primary"
         onClick={() => navigate(`/admin-dashboard/edit-employee/${id}`)}
       >
         Edit
       </Button>
-      <Button variant="danger">View</Button>
+      <Button
+        variant="ouline"
+        className="bg-yellow-600 text-white"
+        onClick={() => navigate(`/admin-dashboard/edit-employee/${id}`)}
+      >
+        Leave
+      </Button>
     </div>
   );
 };
@@ -51,17 +81,19 @@ const Employees = () => {
   const fetchDepartments = async () => {
     dispatch(setLoader(true));
     try {
-      const res = await getData("/employees");
+      const res = await getData("/employee");
       if (res?.success) {
         let sno = 1;
         const data = res?.data?.map((item) => ({
-          _id: item._id,
+          _id: item?._id,
           sno: sno++,
-          dep_name: item.dep_name,
-          action: (
-            <ActionButton id={item._id} deleteDepartment={deleteDepartment} />
-          ),
+          dep_name: item?.department?.dep_name,
+          name: item?.userId?.name,
+          dateOfBirth: new Date(item?.dateOfBirth).toDateString(),
+          profileImage: item?.userId?.profileImage,
+          action: <ActionButton id={item._id} />,
         }));
+        console.log(data, "data");
         setEmployees(data);
         setFilterRecord(data);
       }
@@ -73,8 +105,8 @@ const Employees = () => {
   };
 
   const handleSearch = (e) => {
-    const records = employees?.filter((dep) =>
-      dep?.dep_name?.toLowerCase()?.includes(e.target.value.toLowerCase())
+    const records = employees?.filter((emp) =>
+      emp?.name?.toLowerCase()?.includes(e.target.value.toLowerCase())
     );
     setFilterRecord(records);
   };
@@ -88,14 +120,14 @@ const Employees = () => {
         <InputField
           type="text"
           className="px-4 py-0.5"
-          placeholder="Seach By Dep Name"
+          placeholder="Seach By Employee Name"
           onChange={handleSearch}
         />
         <Link
           to="/admin-dashboard/add-employee"
           className="px-4 py-2 bg-teal-600 text-white rounded"
         >
-          Add New Department
+          Add New Employee
         </Link>
       </div>
 

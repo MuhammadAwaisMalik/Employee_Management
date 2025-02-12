@@ -4,9 +4,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../../../../components/button";
 import InputField, { SelectField } from "../../../../components/inputField";
-import { getData } from "../../../../data/apiService";
+import { getData, PostData } from "../../../../data/apiService";
 import { setLoader } from "../../../../store/slices/loaderSlice";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // Validation Schema
 const schema = yup.object({
@@ -24,12 +26,14 @@ const schema = yup.object({
   salary: yup.number().required("Salary is required"),
   password: yup.string().required("Password is required"),
   role: yup.string().required("Role is required"),
-  image: yup.string().required("Image is required"),
+  // profileImage: yup.string().required("Image is required"),
 });
 
 const AddEmployee = () => {
   const [departments, setDepartments] = useState([]);
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -38,9 +42,24 @@ const AddEmployee = () => {
     mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      gender: "",
-      maritalStatus: "",
-      department: "",
+      name: `User${Math.floor(Math.random() * 1000)}`,
+      email: `user${Math.floor(Math.random() * 1000)}@example.com`,
+      employeeId: `EMP${Math.floor(Math.random() * 10000)}`,
+      dateOfBirth: new Date(
+        1990 + Math.floor(Math.random() * 30),
+        Math.random() * 12,
+        Math.random() * 28
+      )
+        .toISOString()
+        .split("T")[0], // Random date
+      gender: Math.random() > 0.5 ? "male" : "female",
+      maritalStatus: Math.random() > 0.5 ? "single" : "married",
+      designation: "Software Engineer",
+      department: "IT",
+      salary: Math.floor(Math.random() * 50000) + 30000, // Random salary between 30K and 80K
+      password: "Test@1234",
+      role: "employee",
+      profileImage: null,
     },
   });
 
@@ -55,7 +74,7 @@ const AddEmployee = () => {
       if (res?.success) {
         const data = res?.data?.map((item) => ({
           label: item.dep_name,
-          value: item.dep_name,
+          value: item._id,
         }));
         setDepartments(data);
       }
@@ -67,8 +86,32 @@ const AddEmployee = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
-    alert("Employee added successfully!");
+    console.log(data, "data");
+
+    const { profileImage, ...payload } = data;
+    const formDataObj = new FormData();
+    Object.keys(payload).forEach((key) => {
+      formDataObj.append(key, payload[key]);
+    });
+
+    console.log(image, "data?.profileImage");
+
+    if (image) {
+      formDataObj.append("profileImage", image);
+    }
+
+    try {
+      const res = await PostData("/employee/add", formDataObj);
+      if (res?.success) {
+        toast.success(res?.message);
+        navigate("/admin-dashboard/employees");
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error);
+    }
   };
 
   return (
@@ -251,18 +294,15 @@ const AddEmployee = () => {
                   field.onChange(e.target.value);
                 }}
                 options={[
-                  { value: "IT", label: "IT" },
-                  { value: "HR", label: "HR" },
-                  { value: "Finance", label: "Finance" },
-                  { value: "Marketing", label: "Marketing" },
-                  { value: "Operations", label: "Operations" },
+                  { value: "employee", label: "Employee" },
+                  { value: "admin", label: "Admin" },
                 ]}
                 error={errors.role?.message}
               />
             )}
           />
           <Controller
-            name="image"
+            name="profileImage"
             control={control}
             render={({ field }) => (
               <InputField
@@ -271,8 +311,9 @@ const AddEmployee = () => {
                 value={field.value}
                 onChange={(e) => {
                   field.onChange(e.target.value);
+                  setImage(e.target.files[0]);
                 }}
-                error={errors.image?.message}
+                error={errors.profileImage?.message}
               />
             )}
           />

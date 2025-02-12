@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth.js";
 import depatmentRouter from "./routes/depatment.js";
+import employeeRouter from "./routes/employees.js";
+import leaveRouter from "./routes/leaves.js";
 import { connectDB } from "./db/db.js";
 
 dotenv.config();
@@ -15,10 +17,15 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
+
+app.use(express.static("uploads"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/department", depatmentRouter);
+app.use("/api/employee", employeeRouter);
+app.use("/api/leave", leaveRouter);
 
 app.listen(PORT, () => {
   connectDB();

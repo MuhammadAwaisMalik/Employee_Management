@@ -7,9 +7,11 @@ import {
   FaCheck,
   FaHourglassHalf,
   FaTimes,
+  FaUser,
 } from "react-icons/fa";
 
 const iconMap = {
+  employee: FaUser,
   employees: FaUsers,
   departments: FaBuilding,
   pay: FaMoneyBill,

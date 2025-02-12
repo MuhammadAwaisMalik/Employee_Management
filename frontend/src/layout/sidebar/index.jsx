@@ -7,19 +7,50 @@ import {
   FaCalendarAlt,
   FaCog,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Sidebar = ({ className }) => {
-  const menuItems = [
-    { icon: FaTachometerAlt, label: "Dashboard", path: "/admin-dashboard" },
-    { icon: FaUsers, label: "Employees", path: "/admin-dashboard/employees" },
-    {
-      icon: FaBuilding,
-      label: "Departments",
-      path: "/admin-dashboard/departments",
-    },
-    { icon: FaCalendarAlt, label: "Leaves", path: "/admin-dashboard/leaves" },
-    { icon: FaCog, label: "Setting", path: "/admin-dashboard/settings" },
-  ];
+  const { authData } = useSelector((state) => state.auth);
+  console.log(authData, "authData");
+
+  let menuItems = [];
+  if (authData?.user?.role === "admin") {
+    menuItems = [
+      { icon: FaTachometerAlt, label: "Dashboard", path: "/admin-dashboard" },
+      { icon: FaUsers, label: "Employees", path: "/admin-dashboard/employees" },
+      {
+        icon: FaBuilding,
+        label: "Departments",
+        path: "/admin-dashboard/departments",
+      },
+      { icon: FaCalendarAlt, label: "Leaves", path: "/admin-dashboard/leaves" },
+      { icon: FaCog, label: "Setting", path: "/admin-dashboard/settings" },
+    ];
+  } else {
+    menuItems = [
+      {
+        icon: FaTachometerAlt,
+        label: "Dashboard",
+        path: "/employee-dashboard",
+      },
+      {
+        icon: FaUsers,
+        label: "My Profile",
+        path: "/employee-dashboard/my-profile",
+      },
+      {
+        icon: FaBuilding,
+        label: "Departments",
+        path: "/employee-dashboard/departments",
+      },
+      {
+        icon: FaCalendarAlt,
+        label: "Leaves",
+        path: "/employee-dashboard/leaves",
+      },
+      { icon: FaCog, label: "Setting", path: "/employee-dashboard/settings" },
+    ];
+  }
 
   return (
     <div className={`flex w-64 flex-col bg-[#1a222c] text-white ${className}`}>

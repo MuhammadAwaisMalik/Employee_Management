@@ -14,7 +14,7 @@ const Header = ({ toggleSidebar, handleLogout, authData }) => {
         <div className="text-xl font-serif italic">Employee MS</div>
 
         <div className="text-lg capitalize">
-          Welcome, {authData?.user?.role}
+          Welcome, {authData?.user?.name}
         </div>
       </div>
 

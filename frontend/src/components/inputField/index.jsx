@@ -12,6 +12,7 @@ export const TextAreaFeild = ({
   placeholder = "",
   error = "",
   className = "",
+  rows,
   ...props
 }) => {
   return (
@@ -28,6 +29,7 @@ export const TextAreaFeild = ({
         type={type}
         id={id || name}
         name={name}
+        rows={rows || 1}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
@@ -40,10 +42,8 @@ export const TextAreaFeild = ({
 };
 
 export const SelectField = ({ label, options, error, ...rest }) => (
-  <div className="mb-4">
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      {label}
-    </label>
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700 ">{label}</label>
     <select
       {...rest}
       className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500`}
