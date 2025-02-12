@@ -20,8 +20,6 @@ app.use(
 
 app.use(express.json());
 
-app.use(express.static("uploads"));
-
 app.use("/api/auth", authRouter);
 app.use("/api/department", depatmentRouter);
 app.use("/api/employee", employeeRouter);

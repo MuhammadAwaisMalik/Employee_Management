@@ -2,20 +2,6 @@ import mongoose from "mongoose";
 import Employee from "../models/employee.js";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
-import multer from "multer";
-import path from "path";
-
-const storage = multer.diskStorage({
-  destination: "/uploads",
-  filename: (req, file, cb) => {
-    console.log(file, "uploadfile");
-
-    const uniqueSuffix = Date.now() + path.extname(file.originalname);
-    cb(null, uniqueSuffix);
-  },
-});
-
-export const upload = multer({ storage: storage });
 
 export const getEmployee = async (req, res) => {
   try {
