@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", authMiddleware, getDepartment);
+router.get("/", getDepartment);
 router.get("/:id", authMiddleware, getSingleDepartment);
 router.post("/add", authMiddleware, addDepartment);
 router.post("/:id", authMiddleware, updateDepartment);

@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import Department from "../models/department.js";
 
 export const getDepartment = async (req, res) => {
+  console.log(req, "getDepartment");
+
   try {
     const departments = await Department.find();
     res.status(200).json({
