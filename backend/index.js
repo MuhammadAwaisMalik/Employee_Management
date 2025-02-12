@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 const app = express();
 app.use(
   cors({
-    origin: ["https://employee-management-theta-gilt.vercel.app"],
+    origin: "https://employee-management-5gzm.vercel.app",
     credentials: true,
   })
 );
